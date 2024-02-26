@@ -51,12 +51,12 @@ export default function LoginPage() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <p className="text-right">Don't have an account? </p>
+        <p className="text-left">Don't have an account? </p>
         <div className="flex justify-between">
-          <button type="submit">Login</button>
           <div className="register-button">
             <Link href="/auth/register">Register</Link>
           </div>
+          <button type="submit">Login</button>
         </div>
         {error && <p>{error}</p>}
       </form>

@@ -65,14 +65,14 @@ export default function RegisterPage() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <p className="text-right">Already have an account? </p>
+        <p className="text-left">Already have an account? </p>
         <div className="flex justify-between">
-          <button type="submit">Register</button>
           <div className="login-button">
             <Link href="/auth/login" className="">
               Login
             </Link>
           </div>
+          <button type="submit">Register</button>
         </div>
       </form>
     </div>
