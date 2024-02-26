@@ -1,12 +1,8 @@
 // src/app/api/login/route.ts
-
+import { NextRequest } from "next/server";
 import { serialize } from "cookie";
 
-export async function POST(request: {
-  json: () =>
-    | PromiseLike<{ username: string; password: string }>
-    | { username: string; password: string };
-}) {
+export async function POST(request: NextRequest) {
   try {
     const { username, password } = await request.json();
 
@@ -60,13 +56,16 @@ export async function POST(request: {
     };
 
     // Optionally, redirect user or send success response
-    return new Response(JSON.stringify({
-      authToken: data.login.authToken, // Send authToken for client-side storage (if applicable)
-      username: data.login.user.name, // Include username or other user details in response
-    }), {
-      status: 200,
-      headers,
-    });
+    return new Response(
+      JSON.stringify({
+        authToken: data.login.authToken, // Send authToken for client-side storage (if applicable)
+        username: data.login.user.name, // Include username or other user details in response
+      }),
+      {
+        status: 200,
+        headers,
+      }
+    );
   } catch (error) {
     return new Response(JSON.stringify({ message: (error as Error).message }), {
       status: 500,
