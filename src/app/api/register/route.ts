@@ -1,10 +1,8 @@
 // src/app/api/register/route.ts
 
-export async function POST(request: {
-  json: () =>
-    | PromiseLike<{ username: any; email: any; password: any; name: any }>
-    | { username: any; email: any; password: any; name: any };
-}) {
+import { NextRequest } from "next/server";
+
+export async function POST(request: NextRequest) {
   const { username, email, password, name } = await request.json();
 
   // Define the GraphQL mutation for registering a new user
