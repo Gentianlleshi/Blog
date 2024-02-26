@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
+/* :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
@@ -30,4 +30,60 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+} */
+
+/* #cacaca is the color of the input border */
+/* shadow-[rgba(17,_17,_26,_0.1)_0px_0px_16px] is the class for the card shadow  */
+/* background-color: #625656; is the color of the button on hover  */
+
+/* --tw-shadow: rgba(17, 17, 26, 0.1) 0px 0px 16px;
+--tw-shadow-colored: 0px 0px 16px var(--tw-shadow-color);
+box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000),
+  var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow); is for box shadow  */
+
+input {
+  border: 1px solid #cacaca;
+  padding: 4px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  --tw-shadow: rgba(17, 17, 26, 0.1) 0px 0px 16px;
+  --tw-shadow-colored: 0px 0px 16px var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000),
+    var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+button[type="submit"] {
+  padding: 7px 20px;
+  border-radius: 6px;
+  background-color: grey;
+  border: 1px solid #cacaca;
+  cursor: pointer;
+  color: #fff;
+  width: fit-content;
+}
+button[type="submit"]:hover,
+.register-button:hover,
+.login-button:hover {
+  background-color: #625656;
+}
+.register-button,
+.login-button {
+  padding: 7px 20px;
+  border-radius: 6px;
+  background-color: #de4e4e;
+  border: 1px solid #cacaca;
+  cursor: pointer;
+  color: #fff;
+  width: fit-content;
+}
+footer svg {
+  color: #5b3f3f;
+}
+footer svg path {
+  fill: #f4bfbf;
+}
+footer svg:hover {
+  color: #f4bfbf;
+}
+footer svg:hover path {
+  fill: #5b3f3f;
 }
