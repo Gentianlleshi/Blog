@@ -24,32 +24,27 @@ const Modal = ({
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
-      console.log(file, "gallery or camera");
       setFileSelected(true);
-
-      // Prepare FormData to send the file
       const formData = new FormData();
-      formData.append("file", file); // 'file' is the key expected by WordPress
+      formData.append("file", file);
 
-      // Define the URL to your WordPress media endpoint
       const wpMediaUrl =
-        "https://sardinie.web-devtesting.xyz//wp-json/wp/v2/media";
+        "https://sardinie.web-devtesting.xyz/wp-json/wp/v2/media";
 
-      // Send the file to WordPress
       try {
         const response = await fetch(wpMediaUrl, {
           method: "POST",
           headers: {
-            // Replace 'YourAppPassword' with your actual application password
-            // Authorization: "Basic " + btoa("test:test"),
             Authorization: `Bearer ${token}`,
-            // This header is required by WordPress for media uploads
             "Content-Disposition": "attachment; filename=" + file.name,
           },
-          body: formData, // FormData will be sent as multipart/form-data
+          body: formData,
         });
         const data = await response.json();
-        console.log(data); // Handle success response
+        if (data.id) {
+          // Assuming you have a way to pass this ID back to the parent component or directly use it here
+          createPostWithImage(data.id); // Call function to create post with this image ID
+        }
       } catch (error) {
         console.error("Error uploading file to WordPress:", error);
       }
