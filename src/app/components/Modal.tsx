@@ -1,12 +1,11 @@
+// src/app/components/Modal.tsx
 "use client";
 import Link from "next/link";
 import React, { useState, useRef } from "react";
+import { useDispatch } from "react-redux";
+import { setImageId } from "@/app/redux/slices/imageSlice";
 import { GrSubtractCircle } from "react-icons/gr";
-import {
-  IoCameraOutline,
-  IoImagesOutline,
-  // IoVideocamOutline,
-} from "react-icons/io5";
+import { IoCameraOutline, IoImagesOutline } from "react-icons/io5";
 
 const Modal = ({
   isOpen,
@@ -18,6 +17,7 @@ const Modal = ({
   const cameraInputRef = useRef<HTMLInputElement>(null);
   const galleryInputRef = useRef<HTMLInputElement>(null);
   const [fileSelected, setFileSelected] = useState(false);
+  const dispatch = useDispatch(); // Call useDispatch at the top level of your component
 
   const token = localStorage.getItem("authToken");
 
@@ -42,14 +42,17 @@ const Modal = ({
         });
         const data = await response.json();
         if (data.id) {
-          // Assuming you have a way to pass this ID back to the parent component or directly use it here
-          createPostWithImage(data.id); // Call function to create post with this image ID
+          dispatch(setImageId(data.id)); // Use the dispatch function here
         }
+        console.log("File uploaded to WordPress:", data);
       } catch (error) {
         console.error("Error uploading file to WordPress:", error);
       }
     }
   };
+  // const handleImageUploadSuccess = (uploadedImageId: string) => {
+  //   dispatch(setImageId(uploadedImageId));
+  // };
 
   const handleCameraClick = () => {
     if (cameraInputRef.current) {
@@ -117,3 +120,6 @@ const Modal = ({
 };
 
 export default Modal;
+function dispatch(arg0: any) {
+  throw new Error("Function not implemented.");
+}

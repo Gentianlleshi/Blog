@@ -2,12 +2,17 @@
 "use client";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useSelector } from "react-redux";
+import { RootState } from "@/app/redux/store";
+import { setImageId } from "../redux/slices/imageSlice";
 
 export default function CreatePostPage() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [imageId, setImageId] = useState(""); // Add state for imageId
+  // const [imageId, setImageId] = useState(""); // Add state for imageId
   const router = useRouter();
+
+  const imageId = useSelector((state: RootState) => state.image.imageId);
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
