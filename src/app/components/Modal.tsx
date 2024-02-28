@@ -44,7 +44,7 @@ const Modal = ({
         if (data.id) {
           dispatch(setImageId(data.id)); // Use the dispatch function here
         }
-        console.log("File uploaded to WordPress:", data);
+        console.log("File uploaded to WordPress:", data.guid.rendered);
       } catch (error) {
         console.error("Error uploading file to WordPress:", error);
       }
@@ -120,6 +120,3 @@ const Modal = ({
 };
 
 export default Modal;
-function dispatch(arg0: any) {
-  throw new Error("Function not implemented.");
-}

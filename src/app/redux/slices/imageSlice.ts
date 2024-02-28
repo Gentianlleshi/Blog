@@ -1,24 +1,23 @@
-// src/redux/slices/imageSlice.ts
+// app/redux/slices/imageSlice.ts
 "use client";
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 
-interface ImageState {
-  imageId: string;
-}
-
-const initialState: ImageState = {
-  imageId: "",
-};
-
-const imageSlice = createSlice({
+export const imageSlice = createSlice({
   name: "image",
-  initialState,
+  initialState: {
+    imageId: "",
+    imageUrl: "", // Add a field for storing the image URL
+  },
   reducers: {
-    setImageId(state, action: PayloadAction<string>) {
+    setImageId: (state, action) => {
       state.imageId = action.payload;
+    },
+    setImageUrl: (state, action) => {
+      state.imageUrl = action.payload; // Add a reducer for setting the image URL
     },
   },
 });
 
-export const { setImageId } = imageSlice.actions;
+export const { setImageId, setImageUrl } = imageSlice.actions;
+
 export default imageSlice.reducer;

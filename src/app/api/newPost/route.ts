@@ -1,9 +1,46 @@
-// app/api/newPost/route.ts
 export async function POST(request: Request) {
   const { title, content, imageId } = await request.json();
-
   const authHeader = request.headers.get("Authorization");
   const authToken = authHeader?.split(" ")[1];
+
+  // Initialize imageUrl to an empty string
+  let imageUrl = "";
+
+  if (imageId && authToken) {
+    // Use the correct WordPress REST API endpoint for media
+    const mediaUrl = `https://sardinie.web-devtesting.xyz/wp-json/wp/v2/media/${imageId}`;
+
+    const mediaResponse = await fetch(mediaUrl, {
+      headers: {
+        Authorization: `Bearer ${authToken}`,
+      },
+    });
+
+    if (!mediaResponse.ok) {
+      // If the fetch call fails, log the error and return a response
+      console.error("Failed to fetch image data");
+      return new Response(
+        JSON.stringify({ message: "Failed to fetch image data" }),
+        {
+          status: mediaResponse.status,
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+    }
+
+    // Parse the response data and extract the source_url
+    const mediaData = await mediaResponse.json();
+    imageUrl = mediaData.source_url; // This is the URL of the uploaded image
+    console.log("Image URL:", imageUrl);
+  }
+
+  // Embed the image URL within the content of the post
+  const contentWithImage = imageUrl
+    ? `<p><img src="${imageUrl}" alt="Uploaded Image" /><br />${content}</p>`
+    : content;
+
+  // Log contentWithImage for debugging
+  console.log("Content with Image:", contentWithImage);
 
   const CREATE_POST_MUTATION = `
     mutation CreatePost($input: CreatePostInput!) {
@@ -21,7 +58,7 @@ export async function POST(request: Request) {
     input: {
       clientMutationId: "CreatePost",
       title,
-      content,
+      content: contentWithImage,
       status: "PUBLISH",
     },
   };
@@ -33,96 +70,39 @@ export async function POST(request: Request) {
     });
   }
 
-  const response = await fetch("https://sardinie.web-devtesting.xyz/graphql", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${authToken}`,
-    },
-    body: JSON.stringify({ query: CREATE_POST_MUTATION, variables }),
-  });
+  const graphqlResponse = await fetch(
+    "https://sardinie.web-devtesting.xyz/graphql",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${authToken}`,
+      },
+      body: JSON.stringify({ query: CREATE_POST_MUTATION, variables }),
+    }
+  );
 
-  const responseData = await response.json();
-  const postCreationResponse = await response.json();
-  if (!response.ok) {
+  if (!graphqlResponse.ok) {
+    const errorText = await graphqlResponse.text();
     return new Response(
-      JSON.stringify({
-        message: "Failed to create post",
-        errors: responseData.errors,
-      }),
+      JSON.stringify({ message: "Failed to create post", error: errorText }),
       {
-        status: response.status,
+        status: graphqlResponse.status,
         headers: { "Content-Type": "application/json" },
       }
     );
   }
-  const newPostId = postCreationResponse.data.createPost.post.id;
-  // Now, update the ACF field with the image ID
-  try {
-    await updateACFFieldForPost(newPostId, imageId, authToken);
-    return new Response(
-      JSON.stringify({
-        message: "Post created and ACF field updated successfully",
-        data: postCreationResponse.data,
-      }),
-      {
-        status: 200,
-        headers: { "Content-Type": "application/json" },
-      }
-    );
-  } catch (error) {
-    // Log the error and possibly handle it
-    console.error(error);
-    // You may want to return a different response here if the ACF update is critical
-  }
 
-  // New logic to update the ACF field with the imageId, if provided
-  if (imageId && responseData.data.createPost.post.id) {
-    await updateACFFieldForPost(
-      responseData.data.createPost.post.id,
-      imageId,
-      authToken
-    );
-  }
+  const graphqlData = await graphqlResponse.json();
 
   return new Response(
     JSON.stringify({
       message: "Post created successfully",
-      data: responseData.data,
+      data: graphqlData.data,
     }),
     {
       status: 200,
       headers: { "Content-Type": "application/json" },
     }
   );
-}
-
-async function updateACFFieldForPost(
-  postId: any,
-  imageId: any,
-  authToken: string
-) {
-  const acfEndpoint = `https://sardinie.web-devtesting.xyz/wp-json/acf/v3/posts/${postId}`;
-  const acfFieldKey = "field_65da4b646dc42"; // Replace with your actual ACF field key
-  const response = await fetch(acfEndpoint, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      // Include any necessary authentication headers
-      Authorization: `Bearer ${authToken}`,
-    },
-    body: JSON.stringify({
-      fields: {
-        [acfFieldKey]: imageId, // Make sure the key matches your ACF field key
-      },
-    }),
-  });
-
-  if (!response.ok) {
-    const errorData = await response.json();
-    console.error("Failed to update ACF field", errorData);
-    // Handle error accordingly
-  } else {
-    console.log("ACF field updated successfully");
-  }
 }

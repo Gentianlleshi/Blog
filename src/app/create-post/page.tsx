@@ -1,48 +1,68 @@
 // app/create-post/page.tsx
 "use client";
 import React, { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/navigation"; // Make sure you're using 'next/router'
 import { useSelector } from "react-redux";
-import { RootState } from "@/app/redux/store";
-import { setImageId } from "../redux/slices/imageSlice";
 
 export default function CreatePostPage() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  // const [imageId, setImageId] = useState(""); // Add state for imageId
+  const [isSubmitting, setIsSubmitting] = useState(false); // Track the submission state
   const router = useRouter();
 
-  const imageId = useSelector((state: RootState) => state.image.imageId);
+  const imageId = useSelector((state) => state.image.imageId); // Make sure the path to imageId is correct
 
-  const handleSubmit = async (e: { preventDefault: () => void }) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true); // Prevent further submits
+
     const authToken = localStorage.getItem("authToken");
     if (!authToken) {
       console.error("No auth token found. Please login first.");
+      setIsSubmitting(false); // Allow retrying if there's no token
       return;
     }
 
-    const response = await fetch("/api/newPost", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${authToken}`,
-      },
-      body: JSON.stringify({ title, content, imageId }), // Include imageId in the request
-    });
+    const mediaUrl = `https://sardinie.web-devtesting.xyz/wp-json/wp/v2/media/${imageId}`;
+    try {
+      const mediaResponse = await fetch(mediaUrl, {
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+      });
 
-    const responseData = await response.json();
-    if (response.ok) {
+      if (!mediaResponse.ok) {
+        throw new Error("Failed to fetch image data");
+      }
+
+      const mediaData = await mediaResponse.json();
+      const imageUrl = mediaData.source_url;
+
+      const contentWithImage = imageUrl
+        ? `<p><img src="${imageUrl}" alt="Uploaded Image" />\n${content}</p>`
+        : content;
+
+      const response = await fetch("/api/newPost", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${authToken}`,
+        },
+        body: JSON.stringify({ title, content: contentWithImage }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to create post");
+      }
+
+      console.log("Post created successfully");
       setTitle("");
       setContent("");
-      setImageId(""); // Reset imageId state
-      console.log("Post created", responseData);
-      router.push("/");
-    } else {
-      console.error(
-        "Failed to create post",
-        responseData.message || "An error occurred"
-      );
+      router.push("/"); // Redirect to the desired page
+    } catch (error) {
+      console.error(error.message);
+    } finally {
+      setIsSubmitting(false); // Re-enable the submit button upon completion
     }
   };
 
@@ -65,7 +85,9 @@ export default function CreatePostPage() {
             onChange={(e) => setContent(e.target.value)}
           />
         </label>
-        <button type="submit">Submit</button>
+        <button type="submit" disabled={isSubmitting}>
+          {isSubmitting ? "Submitting..." : "Submit"}
+        </button>
       </form>
     </div>
   );
