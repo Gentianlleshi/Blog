@@ -61,7 +61,7 @@ export default function CreatePostPage() {
       setContent("");
       router.push("/"); // Redirect to the desired page
     } catch (error) {
-      console.error(error.message);
+      console.error(error);
     } finally {
       setIsSubmitting(false); // Re-enable the submit button upon completion
     }
