@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation"; // Make sure you're using 'next/router'
 import { useSelector } from "react-redux";
+import { RootState } from "@/app/redux/store"; //
 
 export default function CreatePostPage() {
   const [title, setTitle] = useState("");
@@ -10,9 +11,9 @@ export default function CreatePostPage() {
   const [isSubmitting, setIsSubmitting] = useState(false); // Track the submission state
   const router = useRouter();
 
-  const imageId = useSelector((state) => state.image.imageId); // Make sure the path to imageId is correct
+  const imageId = useSelector((state: RootState) => state.image.imageId);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
     setIsSubmitting(true); // Prevent further submits
 
