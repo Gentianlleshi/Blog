@@ -1,35 +1,26 @@
 // components/SinglePost.tsx
 import React from "react";
 import { FaRegUser } from "react-icons/fa";
+import { SinglePostProps } from "../types";
 
 import Image from "next/image";
 import CommentIcon from "./CommentIcon";
 
-interface SinglePostProps {
-  post: PostNode;
-}
 interface AuthorNode {
+  id: string;
   name: string;
-  // Add other author-related fields as needed
 }
+
 interface CommentNode {
   id: string;
   content: string;
-  // Add other comment-related fields as needed
+  author: {
+    node: AuthorNode; // Not an array, assuming each comment has a single author
+  };
 }
 
-interface PostNode {
-  id: string;
-  title: string;
-  content: string;
-  author: {
-    node: AuthorNode;
-  };
-  comments: {
-    edges: {
-      node: CommentNode;
-    }[];
-  };
+interface CommentEdge {
+  node: CommentNode[];
 }
 
 const SinglePost: React.FC<SinglePostProps> = ({ post }) => {
@@ -46,23 +37,26 @@ const SinglePost: React.FC<SinglePostProps> = ({ post }) => {
     <article>
       <div className="flex gap-1 items-center">
         <FaRegUser />
-        <h3>{post.author.node.name}</h3>
+        <h3 key={post.id}>{post.author.node.name}</h3>
       </div>
       <h2>{post.title}</h2>
-      {imageSrc && (
-        <Image
-          src={imageSrc}
-          alt={post.title + " Post Image"}
-          width={600}
-          height={300}
-          className="w-full h-auto max-h-[500px] object-contain"
-        />
-      )}
+      <div key={post.id}>
+        {imageSrc && (
+          <Image
+            // key={post.id}
+            src={imageSrc}
+            alt={post.title + " Post Image"}
+            width={600}
+            height={300}
+            className="w-full h-auto max-h-[500px] object-contain"
+          />
+        )}
+      </div>
       <div className="flex gap-1"></div>
       <div>
         {post.comments.edges.map((comment) => (
-          <div key={comment.node.id}>
-            {/* <p>{comment.author.node.name}</p> */}
+          <div key={comment.node.id} className="flex gap-1">
+            <p>{comment.node.author.node.name}</p>
             <p dangerouslySetInnerHTML={{ __html: comment.node.content }} />
           </div>
         ))}

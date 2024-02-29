@@ -1,43 +1,14 @@
-// app/api/addComment/route.ts
+import type { NextApiRequest, NextApiResponse } from "next";
 
-interface CommentInput {
-  postId: string;
-  content: string;
-  token: string;
-}
+export async function POST(req: NextApiRequest, res: NextApiResponse) {
+  const { postId, content, token } = req.body;
 
-interface CommentAuthor {
-  id: string;
-  name: string;
-}
+  // Ensure all required fields are provided
+  if (!postId || !content || !token) {
+    return res.status(400).json({ error: "Missing required fields" });
+  }
 
-interface Comment {
-  id: string;
-  content: string;
-  author: {
-    node: CommentAuthor;
-  };
-}
-
-interface CreateCommentData {
-  createComment: {
-    comment: Comment | null;
-  };
-}
-
-interface GraphQLResponse {
-  data: CreateCommentData;
-  errors?: Array<{
-    message: string;
-    locations?: Array<{ line: number; column: number }>;
-    path?: string[];
-    extensions?: any;
-  }>;
-}
-
-
-async function submitComment({ postId, content, token }: CommentInput): Promise<GraphQLResponse> {
-  const query = `
+  const CREATE_COMMENT_MUTATION = `
     mutation CreateComment($input: CreateCommentInput!) {
       createComment(input: $input) {
         comment {
@@ -51,27 +22,53 @@ async function submitComment({ postId, content, token }: CommentInput): Promise<
           }
         }
       }
-    }    
-    `;
+    }
+  `;
 
-    const variables = {
-      input: {
-        commentOn: postId, // this id is in base64 format
-        content,
-      },
-    };
-
-  const response = await fetch('https://sardinie.web-devtesting.xyz/graphql', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`,
+  const variables = {
+    input: {
+      commentOn: parseInt(postId, 10),
+      content,
     },
-    body: JSON.stringify({ query, variables }),
-  });
+  };
 
-  const responseData: GraphQLResponse = await response.json();
-  return responseData;
+  try {
+    const graphqlResponse = await fetch(
+      "https://sardinie.web-devtesting.xyz/graphql",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ query: CREATE_COMMENT_MUTATION, variables }),
+      }
+    );
+
+    if (!graphqlResponse.ok) {
+      // Handle HTTP errors
+      const errorText = await graphqlResponse.text();
+      return res
+        .status(graphqlResponse.status)
+        .json({ error: "Failed to create comment", details: errorText });
+    }
+
+    const graphqlData = await graphqlResponse.json();
+    if (graphqlData.errors) {
+      // Handle GraphQL errors
+      return res
+        .status(400)
+        .json({ error: "GraphQL error", details: graphqlData.errors });
+    }
+
+    // Success
+    return res.status(200).json({
+      message: "Comment created successfully",
+      data: graphqlData.data,
+    });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ error: "Internal Server Error", details: error });
+  }
 }
-
-  export { submitComment };

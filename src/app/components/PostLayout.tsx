@@ -2,6 +2,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import SinglePost from "./SinglePost";
+import { SinglePostProps } from "../types";
 // Define the TypeScript interfaces based on your data structure
 interface AuthorNode {
   id: string;
@@ -14,19 +15,7 @@ interface CategoryNode {
   name: string;
 }
 
-interface PostNode {
-  id: string;
-  title: string;
-  slug: string;
-  content: string;
-  author: {
-    node: AuthorNode;
-  };
-  categories: {
-    edges: Array<{ node: CategoryNode }>;
-  };
-}
-
+import { PostNode } from "../types"; // Add the missing import statement
 const PostLayout = () => {
   const [posts, setPosts] = useState<PostNode[]>([]);
 
@@ -44,7 +33,7 @@ const PostLayout = () => {
   return (
     <div>
       {posts.map((post) => (
-        <SinglePost key={post.id} post={post} />
+        <SinglePost key={post.id} post={post as PostNode} />
       ))}
     </div>
   );

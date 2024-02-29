@@ -1,18 +1,31 @@
-// auth types for the auth slice in Redux 
-
-export interface AuthorNode {
+interface AuthorNode {
   id: string;
   name: string;
 }
 
-export interface CategoryNode {
+interface CommentNode {
+  id: string;
+  content: string; // Assuming content is an HTML string
+  author: {
+    node: AuthorNode;
+  };
+}
+
+interface CommentEdge {
+  node: CommentNode;
+}
+
+interface PostComments {
+  edges: CommentEdge[];
+}
+
+interface CategoryNode {
   id: string;
   slug: string;
   name: string;
 }
 
 export interface PostNode {
-  comments: string | TrustedHTML;
   id: string;
   title: string;
   slug: string;
@@ -23,6 +36,9 @@ export interface PostNode {
   categories: {
     edges: Array<{ node: CategoryNode }>;
   };
+  comments: PostComments;
 }
 
-
+export interface SinglePostProps {
+  post: PostNode;
+}
