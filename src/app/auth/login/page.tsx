@@ -1,16 +1,16 @@
 // src/app/auth/login/page.tsx
 "use client";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
-import type { NextPage } from "next";
 
-// Define a type for the props expected by LoginPage
+import { useState } from "react";
+import { useRouter } from "next/router"; // Corrected from 'next/navigation'
+import Link from "next/link";
+
 interface LoginPageProps {
-  onLoginSuccess?: () => void; // Optional function prop
+  onLoginSuccess?: () => void;
 }
 
-const LoginPage: NextPage<LoginPageProps> = ({ onLoginSuccess }) => {
+// Directly export the page function without specifying LoginPageProps at this level.
+const LoginPage = ({ onLoginSuccess }: LoginPageProps) => {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<string>("");
@@ -30,14 +30,12 @@ const LoginPage: NextPage<LoginPageProps> = ({ onLoginSuccess }) => {
       const { authToken, username }: { authToken: string; username: string } =
         await response.json();
       console.log("authToken", authToken);
-      localStorage.setItem("authToken", authToken); // Optional, based on security considerations
+      localStorage.setItem("authToken", authToken);
       localStorage.setItem("username", username);
 
-      // Only call onLoginSuccess if it's provided
       if (typeof onLoginSuccess === "function") {
         onLoginSuccess();
       } else {
-        // If onLoginSuccess isn't provided, default to pushing to the homepage
         router.push("/");
       }
     } else {
@@ -51,7 +49,7 @@ const LoginPage: NextPage<LoginPageProps> = ({ onLoginSuccess }) => {
       <h1 className="text-center font-semibold text-3xl mt-10">Login</h1>
       <form
         onSubmit={handleLogin}
-        className="flex flex-col w-full p-12 mt-14 gap-8 shadow-[rgba(17,_17,_26,_0.1)_0px_0px_16px]"
+        className="flex flex-col w-full p-12 mt-14 gap-8 shadow-[rgba(17, 17, 26, 0.1) 0px 0px 16px]"
       >
         <input
           type="text"
