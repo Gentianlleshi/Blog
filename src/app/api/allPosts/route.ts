@@ -24,19 +24,6 @@ export async function GET() {
               }
             }
           }
-          comments {
-            edges {
-              node {
-                content
-                author {
-                  node {
-                    name
-                    id
-                  }
-                }
-              }
-            }
-          }
         }
       }
     }
@@ -44,26 +31,29 @@ export async function GET() {
   `;
 
   try {
-    const response = await fetch('https://sardinie.web-devtesting.xyz/graphql', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ query }),
-    });
+    const response = await fetch(
+      "https://sardinie.web-devtesting.xyz/graphql",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ query }),
+      }
+    );
 
     if (!response.ok) {
-      throw new Error('Network response was not ok');
+      throw new Error("Network response was not ok");
     }
 
     const { data } = await response.json();
     return new Response(JSON.stringify(data.posts.edges), {
       status: 200,
-      headers: { 'Content-Type': 'application/json' },
+      headers: { "Content-Type": "application/json" },
     });
   } catch (error) {
-    console.error('Error fetching posts:', error);
-    return new Response(JSON.stringify({ error: 'Failed to fetch posts' }), {
+    console.error("Error fetching posts:", error);
+    return new Response(JSON.stringify({ error: "Failed to fetch posts" }), {
       status: 500,
-      headers: { 'Content-Type': 'application/json' },
+      headers: { "Content-Type": "application/json" },
     });
   }
 }

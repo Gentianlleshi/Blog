@@ -11,7 +11,7 @@ const PostLayout = () => {
     const fetchPosts = async () => {
       const response = await fetch("/api/allPosts");
       const data = await response.json();
-      console.log(data);
+      console.log(response);
       setPosts(data.map(({ node }: { node: PostNode }) => node));
     };
 

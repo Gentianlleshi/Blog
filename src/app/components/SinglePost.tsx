@@ -4,7 +4,7 @@ import { FaRegUser } from "react-icons/fa";
 import { SinglePostProps } from "../types";
 
 import Image from "next/image";
-import CommentIcon from "./CommentIcon";
+// import CommentIcon from "./CommentIcon";
 
 interface AuthorNode {
   id: string;
@@ -37,7 +37,7 @@ const SinglePost: React.FC<SinglePostProps> = ({ post }) => {
     <article>
       <div className="flex gap-1 items-center">
         <FaRegUser />
-        <h3 key={post.id}>{post.author.node.name}</h3>
+        <h3>{post.author.node.name}</h3>
       </div>
       <h2>{post.title}</h2>
       <div key={post.id}>
