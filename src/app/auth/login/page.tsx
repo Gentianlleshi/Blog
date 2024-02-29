@@ -1,16 +1,22 @@
-// app/auth/login/page.tsx
+// src/app/auth/login/page.tsx
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import type { NextPage } from "next";
 
-export default function LoginPage({ onLoginSuccess }: { onLoginSuccess: any }) {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+// Define a type for the props expected by LoginPage
+interface LoginPageProps {
+  onLoginSuccess?: () => void; // Optional function prop
+}
+
+const LoginPage: NextPage<LoginPageProps> = ({ onLoginSuccess }) => {
+  const [username, setUsername] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [error, setError] = useState<string>("");
   const router = useRouter();
 
-  const handleLogin = async (event: { preventDefault: () => void }) => {
+  const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const response = await fetch("/api/login", {
       method: "POST",
@@ -21,7 +27,8 @@ export default function LoginPage({ onLoginSuccess }: { onLoginSuccess: any }) {
     });
 
     if (response.ok) {
-      const { authToken, username } = await response.json();
+      const { authToken, username }: { authToken: string; username: string } =
+        await response.json();
       console.log("authToken", authToken);
       localStorage.setItem("authToken", authToken); // Optional, based on security considerations
       localStorage.setItem("username", username);
@@ -69,4 +76,6 @@ export default function LoginPage({ onLoginSuccess }: { onLoginSuccess: any }) {
       </form>
     </div>
   );
-}
+};
+
+export default LoginPage;
