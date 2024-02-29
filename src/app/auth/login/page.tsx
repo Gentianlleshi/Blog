@@ -7,7 +7,7 @@ import Link from "next/link";
 export default function LoginPage({
   onLoginSuccess,
 }: {
-  onLoginSuccess: () => void;
+  onLoginSuccess?: () => void;
 }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
