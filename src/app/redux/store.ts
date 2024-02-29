@@ -1,11 +1,13 @@
-// src/redux/store.ts
+// app/redux/store.ts
 
 import { configureStore } from "@reduxjs/toolkit";
 import imageReducer from "./slices/imageSlice";
+import authReducer from "./slices/authSlice";
 
 export const store = configureStore({
   reducer: {
     image: imageReducer,
+    auth: authReducer,
   },
 });
 

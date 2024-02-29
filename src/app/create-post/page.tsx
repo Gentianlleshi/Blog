@@ -40,7 +40,7 @@ export default function CreatePostPage() {
       const imageUrl = mediaData.source_url;
 
       const contentWithImage = imageUrl
-        ? `<p><img src="${imageUrl}" alt="Uploaded Image" />\n${content}</p>`
+        ? `<img src="${imageUrl}" alt="Uploaded Image" />`
         : content;
 
       const response = await fetch("/api/newPost", {
@@ -79,13 +79,13 @@ export default function CreatePostPage() {
             onChange={(e) => setTitle(e.target.value)}
           />
         </label>
-        <label>
+        {/* <label>
           Content:
           <textarea
             value={content}
             onChange={(e) => setContent(e.target.value)}
           />
-        </label>
+        </label> */}
         <button type="submit" disabled={isSubmitting}>
           {isSubmitting ? "Submitting..." : "Submit"}
         </button>

@@ -1,42 +1,37 @@
 // app/components/Header.tsx
 "use client";
-import React, { useState, useEffect } from "react";
-import { FaUserCircle, FaBars } from "react-icons/fa";
+import React, { useEffect } from "react";
+import { FaUserCircle, FaBars, FaSignOutAlt } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "../redux/store"; // Adjust the import path as needed
+import { setLoginState, logout } from "../redux/slices/authSlice";
 
 const Header = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [username, setUsername] = useState("");
   const router = useRouter();
-
+  const dispatch = useDispatch();
+  // Accessing the isLoggedIn and username directly from the auth state
   useEffect(() => {
     const token = localStorage.getItem("authToken");
     const username = localStorage.getItem("username");
-
     if (token && username) {
-      setIsLoggedIn(true);
-      setUsername(username);
-    } else {
-      setIsLoggedIn(false);
+      dispatch(setLoginState({ isLoggedIn: true, username }));
     }
-  }, []);
+  }, [dispatch]);
+  const { isLoggedIn, username } = useSelector(
+    (state: RootState) => state.auth
+  );
 
   const handleLogout = () => {
-    // Clear user token and username from local storage
     localStorage.removeItem("authToken");
     localStorage.removeItem("username");
-
-    // Update state to reflect logout
-    setIsLoggedIn(false);
-    setUsername("");
-
-    // Redirect to homepage or login page
+    dispatch(logout());
     router.push("/auth/login");
   };
 
   return (
-    <header className="w-full flex justify-between items-center">
+    <header className="w-full p-4 flex justify-between items-center">
       <div className="cursor-pointer">
         <FaBars onClick={() => console.log("Toggle Categories")} />
       </div>
@@ -45,7 +40,7 @@ const Header = () => {
         {isLoggedIn ? (
           <div className="flex gap-2 cursor-pointer items-center">
             <span>{username}</span>
-            <FaUserCircle />
+            <FaSignOutAlt onClick={handleLogout} title="Logout" />
           </div>
         ) : (
           <div
@@ -53,7 +48,7 @@ const Header = () => {
             className="flex gap-2 items-center cursor-pointer"
           >
             <span>Login</span>
-            <FaUserCircle className="h-6" />
+            <FaUserCircle className="h-6 w-6" />
           </div>
         )}
       </div>

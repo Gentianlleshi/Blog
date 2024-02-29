@@ -4,7 +4,11 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
-export default function LoginPage() {
+export default function LoginPage({
+  onLoginSuccess,
+}: {
+  onLoginSuccess: () => void;
+}) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -22,10 +26,17 @@ export default function LoginPage() {
 
     if (response.ok) {
       const { authToken, username } = await response.json();
-      localStorage.setItem("authToken", authToken); // Optional, based on security considerations
       console.log("authToken", authToken);
+      localStorage.setItem("authToken", authToken); // Optional, based on security considerations
       localStorage.setItem("username", username);
-      router.push("/");
+
+      // Only call onLoginSuccess if it's provided
+      if (typeof onLoginSuccess === "function") {
+        onLoginSuccess();
+      } else {
+        // If onLoginSuccess isn't provided, default to pushing to the homepage
+        router.push("/");
+      }
     } else {
       const errorData = await response.json();
       setError(errorData.message || "Login failed");

@@ -36,7 +36,7 @@ export async function POST(request: Request) {
 
   // Embed the image URL within the content of the post
   const contentWithImage = imageUrl
-    ? `<p><img src="${imageUrl}" alt="Uploaded Image" /><br />${content}</p>`
+    ? `<img src="${imageUrl}" alt="Uploaded Image" />`
     : content;
 
   // Log contentWithImage for debugging
@@ -49,6 +49,7 @@ export async function POST(request: Request) {
           id
           title
           date
+          content
         }
       }
     }
