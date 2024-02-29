@@ -2,18 +2,14 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/router"; // Corrected from 'next/navigation'
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 
-interface LoginPageProps {
-  onLoginSuccess?: () => void;
-}
-
-// Directly export the page function without specifying LoginPageProps at this level.
-const LoginPage = ({ onLoginSuccess }: LoginPageProps) => {
-  const [username, setUsername] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [error, setError] = useState<string>("");
+// Assuming onLoginSuccess is a client-side logic handler
+const LoginPage = () => {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const router = useRouter();
 
   const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -32,12 +28,7 @@ const LoginPage = ({ onLoginSuccess }: LoginPageProps) => {
       console.log("authToken", authToken);
       localStorage.setItem("authToken", authToken);
       localStorage.setItem("username", username);
-
-      if (typeof onLoginSuccess === "function") {
-        onLoginSuccess();
-      } else {
-        router.push("/");
-      }
+      router.push("/");
     } else {
       const errorData = await response.json();
       setError(errorData.message || "Login failed");
