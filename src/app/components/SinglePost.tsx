@@ -52,8 +52,7 @@ const SinglePost: React.FC<SinglePostProps> = ({ post }) => {
           />
         )}
       </div>
-      <div className="flex gap-1"></div>
-      <div>
+      {/* <div>
         {post.comments.edges.map((comment) => (
           <div key={comment.node.id} className="flex gap-1">
             <p>{comment.node.author.node.name}</p>
@@ -61,7 +60,7 @@ const SinglePost: React.FC<SinglePostProps> = ({ post }) => {
           </div>
         ))}
       </div>
-      <CommentIcon postId={post.id} />
+      <CommentIcon postId={post.id} /> */}
     </article>
   );
 };
