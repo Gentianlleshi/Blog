@@ -4,7 +4,6 @@ import { FaRegUser } from "react-icons/fa";
 import { SinglePostProps } from "../types";
 
 import Image from "next/image";
-import CommentIcon from "./CommentIcon";
 
 interface AuthorNode {
   id: string;
@@ -61,7 +60,6 @@ const SinglePost: React.FC<SinglePostProps> = ({ post }) => {
           </div>
         ))}
       </div>
-      <CommentIcon postId={post.id} />
     </article>
   );
 };
