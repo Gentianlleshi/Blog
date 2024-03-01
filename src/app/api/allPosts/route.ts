@@ -15,15 +15,6 @@ export async function GET() {
               name
             }
           }
-          categories {
-            edges {
-              node {
-                id
-                slug
-                name
-              }
-            }
-          }
         }
       }
     }
