@@ -31,7 +31,7 @@ const Header = () => {
   };
 
   return (
-    <header className="w-full p-4 flex justify-between items-center">
+    <header className="w-full p-4 flex justify-between items-center fixed top-0">
       <div className="cursor-pointer">
         <FaBars onClick={() => console.log("Toggle Categories")} />
       </div>

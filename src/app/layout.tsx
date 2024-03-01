@@ -21,7 +21,7 @@ export default function RootLayout({
     <Providers>
       <html lang="en">
         <body className={inter.className}>
-          <div className="container bg-[#f2f2f2] h-screen w-screen mx-auto">
+          <div className="container bg-[#f2f2f2] w-screen mx-auto">
             <Header />
             {children}
             <Footer />

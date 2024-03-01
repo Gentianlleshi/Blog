@@ -1,3 +1,4 @@
+// app/api/newPost/route.ts
 export async function POST(request: Request) {
   const { title, content, imageId } = await request.json();
   const authHeader = request.headers.get("Authorization");

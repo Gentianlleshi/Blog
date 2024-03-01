@@ -1,7 +1,15 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ["sardinie.web-devtesting.xyz"],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "sardinie.web-devtesting.xyz",
+        // Optionally, specify a port and pathname if needed
+        // port: '',
+        // pathname: '/path/to/images/**',
+      },
+    ],
   },
 };
 

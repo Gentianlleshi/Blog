@@ -20,13 +20,16 @@ export async function GET() {
     }
   }
   `;
-
   try {
     const response = await fetch(
       "https://sardinie.web-devtesting.xyz/graphql",
       {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "Cache-Control": "no-cache, no-store, must-revalidate",
+        },
+
         body: JSON.stringify({ query }),
       }
     );

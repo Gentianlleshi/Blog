@@ -69,7 +69,7 @@ const Modal = ({
   if (!isOpen) return null;
 
   return (
-    <div className="container px-4 fixed bottom-0 left-0 w-full">
+    <div className="container p-4 fixed bottom-0 left-0 w-full bg-black/[0.2] backdrop-blur-[36px]	">
       <div className="grid">
         <GrSubtractCircle
           onClick={onClose}
@@ -81,7 +81,7 @@ const Modal = ({
             onClick={handleCameraClick}
           >
             <IoCameraOutline size={24} />
-            <span>Use Camera</span>
+            <span className="font-semibold">Use Camera</span>
             <input
               ref={cameraInputRef}
               type="file"
@@ -96,7 +96,7 @@ const Modal = ({
             onClick={handleGalleryClick}
           >
             <IoImagesOutline size={24} />
-            <span>Choose From Gallery</span>
+            <span className="font-semibold">Choose From Gallery</span>
             <input
               ref={galleryInputRef}
               type="file"
