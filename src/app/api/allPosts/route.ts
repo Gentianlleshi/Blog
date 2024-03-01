@@ -27,7 +27,9 @@ export async function GET() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Cache-Control": "no-cache, no-store, must-revalidate",
+          "Cache-Control": "no-cache, no-store, must-revalidate, max-age=0",
+          Pragma: "no-cache",
+          Expires: "0",
         },
 
         body: JSON.stringify({ query }),
