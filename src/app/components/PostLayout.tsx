@@ -19,7 +19,7 @@ const PostLayout = () => {
     fetchPosts();
     const interval = setInterval(fetchPosts, 10 * 1000); // Re-fetch every 10 seconds
 
-    return () => clearInterval(interval); // Cleanup on unmount
+    return () => clearInterval(interval);
   }, []);
 
   return (

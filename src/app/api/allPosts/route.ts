@@ -2,7 +2,7 @@
 export async function GET() {
   const query = `
   query NewQuery {
-    posts(first: 999) {
+    posts(first: 9999) {
       edges {
         node {
           id
