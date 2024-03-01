@@ -31,7 +31,7 @@ const Header = () => {
   };
 
   return (
-    <header className="w-full p-4 flex justify-between items-center fixed top-0">
+    <header className="w-full p-4 flex justify-between items-center fixed top-0  bg-black/[0.2] backdrop-blur-[36px]">
       <div className="cursor-pointer">
         <FaBars onClick={() => console.log("Toggle Categories")} />
       </div>

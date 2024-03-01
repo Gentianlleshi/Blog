@@ -79,13 +79,6 @@ export default function CreatePostPage() {
             onChange={(e) => setTitle(e.target.value)}
           />
         </label>
-        {/* <label>
-          Content:
-          <textarea
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-          />
-        </label> */}
         <button type="submit" disabled={isSubmitting}>
           {isSubmitting ? "Submitting..." : "Submit"}
         </button>

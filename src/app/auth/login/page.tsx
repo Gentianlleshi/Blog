@@ -36,7 +36,7 @@ const LoginPage = () => {
   };
 
   return (
-    <div>
+    <div className="mt-[56px]">
       <h1 className="text-center font-semibold text-3xl mt-10">Login</h1>
       <form
         onSubmit={handleLogin}

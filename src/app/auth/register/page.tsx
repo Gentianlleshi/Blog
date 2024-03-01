@@ -40,7 +40,7 @@ export default function RegisterPage() {
   }, [isRegistered]);
 
   return (
-    <div className="form-wrapper">
+    <div className="form-wrapper mt-[56px]">
       <h1 className="text-center font-semibold text-3xl mt-10">Register</h1>
       <form
         onSubmit={registerUser}

@@ -69,7 +69,7 @@ const Modal = ({
   if (!isOpen) return null;
 
   return (
-    <div className="container p-4 fixed bottom-0 left-0 w-full bg-black/[0.2] backdrop-blur-[36px]	">
+    <div className="container p-4 fixed bottom-0 left-0 w-full bg-black/[0.2] backdrop-blur-[36px]">
       <div className="grid">
         <GrSubtractCircle
           onClick={onClose}
