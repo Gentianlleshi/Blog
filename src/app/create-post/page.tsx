@@ -68,7 +68,7 @@ export default function CreatePostPage() {
   };
 
   return (
-    <div>
+    <div className="mt-[56px]">
       <h1>Create a New Post</h1>
       <form onSubmit={handleSubmit}>
         <label>
