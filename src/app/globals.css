@@ -41,6 +41,16 @@ body {
 box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000),
   var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow); is for box shadow  */
 
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+html {
+  scrollbar-width: none;
+  background-color: #f2f2f2;
+}
+
 input {
   border: 1px solid #cacaca;
   padding: 4px 8px;
