@@ -1,6 +1,6 @@
 // src/app/create-post/page.tsx
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation"; // Import from 'next/router'
 import { useSelector } from "react-redux";
 import { RootState } from "@/app/redux/store";
@@ -11,8 +11,10 @@ export default function CreatePostPage() {
   const [content, setContent] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [imageUrl, setImageUrl] = useState("");
+  const [editing, setEditing] = useState(false);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const imageRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
-
   const imageId = useSelector((state: RootState) => state.image.imageId);
 
   // Fetch the image URL when the component mounts and the imageId is available
@@ -41,7 +43,70 @@ export default function CreatePostPage() {
     fetchImageUrl();
   }, [imageId]);
 
-  const handleSubmit = async (e: { preventDefault: () => void }) => {
+  useEffect(() => {
+    if (imageUrl && canvasRef.current) {
+      const canvas = canvasRef.current;
+      const ctx = canvas.getContext("2d");
+      const img = new window.Image(); // Use window.Image to access the global Image constructor
+
+      img.onload = () => {
+        canvas.width = img.width;
+        canvas.height = img.height;
+        ctx?.drawImage(img, 0, 0);
+      };
+
+      img.src = imageUrl;
+    }
+  }, [imageUrl]);
+
+  const editImageOnServer = async () => {
+    try {
+      // Convert the image URL to a Blob
+      const response = await fetch(imageUrl);
+      const blob = await response.blob();
+      const arrayBuffer = await blob.arrayBuffer();
+      const buffer = Buffer.from(arrayBuffer);
+
+      // Send the image to the server for processing
+      const editResponse = await fetch("/api/editImage", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/octet-stream",
+        },
+        body: JSON.stringify({ buffer: buffer }),
+      });
+
+      if (editResponse.ok) {
+        // Convert the response back to a Blob
+        const editedBlob = await editResponse.blob();
+        // Create a URL for the edited image Blob
+        const editedImageUrl = URL.createObjectURL(editedBlob);
+        // Update your state or UI with the edited image URL
+        setImageUrl(editedImageUrl);
+      } else {
+        console.error("Failed to edit image");
+      }
+    } catch (error) {
+      console.error("Error while editing image:", error);
+    }
+  };
+
+  const startEditing = () => {
+    setEditing(true);
+    // Initialize your image editing library with the imageRef and imageUrl
+  };
+
+  const saveEdit = () => {
+    // Save the edited image data
+    setEditing(false);
+    // You would typically extract the image data from your library and set it to state or upload it
+  };
+
+  const resetEdit = () => {
+    // Reset the image editing library to the original imageUrl
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true); // Prevent further submits
 
@@ -96,8 +161,10 @@ export default function CreatePostPage() {
   };
 
   return (
-    <div className="mt-[56px]">
-      <h1>Create a New Post</h1>
+    <div className="mt-[56px] container p-4">
+      <h1 className="text-center font-semibold text-3xl pt-10">
+        Create a New Post
+      </h1>
       <form onSubmit={handleSubmit}>
         <label>
           Title:
@@ -117,20 +184,36 @@ export default function CreatePostPage() {
         </button>
       </form>
       {imageUrl && (
-        <div className="p-4 mt-[56px]">
+        <div className="mt-8">
           <h2 className="text-lg font-semibold">Preview:</h2>
-          <article>
-            <h2 className="mt-2">{title || "Post title will appear here"}</h2>
-            <div className="">
-              <Image
-                src={imageUrl}
-                alt="Uploaded"
-                width={600}
-                height={300}
-                className="w-full h-auto max-h-[500px] object-contain"
-              />
-            </div>
-          </article>
+          <div className="border rounded p-4 mt-2">
+            <p className="mt-2">{title || "Post title will appear here"}</p>
+            {editing ? (
+              <>
+                <Image
+                  src={imageUrl}
+                  alt="Uploaded"
+                  width={600}
+                  height={300}
+                  layout="responsive"
+                  className="w-full h-auto max-h-[500px] object-contain"
+                />
+              </>
+            ) : (
+              <canvas ref={canvasRef} width={600} height={400} />
+            )}
+          </div>
+          <div>
+            <button onClick={startEditing} className="your-button-styles">
+              {!editing ? "Edit" : ""}
+            </button>
+            {editing && (
+              <div className="flex gap-1">
+                <button onClick={saveEdit}>Save</button>
+                <button onClick={resetEdit}>Reset</button>
+              </div>
+            )}
+          </div>
         </div>
       )}
     </div>

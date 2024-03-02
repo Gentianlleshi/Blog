@@ -41,7 +41,7 @@ export default function RegisterPage() {
 
   return (
     <div className="form-wrapper mt-[56px]">
-      <h1 className="text-center font-semibold text-3xl mt-10">Register</h1>
+      <h1 className="text-center font-semibold text-3xl pt-10">Register</h1>
       <form
         onSubmit={registerUser}
         className="flex flex-col w-full p-12 mt-14 gap-8 shadow-[rgba(17,_17,_26,_0.1)_0px_0px_16px]"

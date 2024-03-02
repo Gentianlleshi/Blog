@@ -6,6 +6,7 @@ import { setImageId } from "@/app/redux/slices/imageSlice";
 import { GrSubtractCircle } from "react-icons/gr";
 import { IoCameraOutline, IoImagesOutline } from "react-icons/io5";
 import Link from "next/link";
+import Image from "next/image";
 
 const Modal = ({
   isOpen,
@@ -20,8 +21,6 @@ const Modal = ({
   const [file, setFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [uploadStatus, setUploadStatus] = useState("idle"); // idle, uploading, uploaded, error
-  const [editMode, setEditMode] = useState(false); // New state to toggle edit mode
-  const [textOverlay, setTextOverlay] = useState(""); // State to store text overlay
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -29,24 +28,11 @@ const Modal = ({
       setFile(selectedFile);
       setPreviewUrl(URL.createObjectURL(selectedFile)); // Generate preview URL
       setUploadStatus("idle");
-      setEditMode(false); // Reset edit mode to false when a new image is selected
     }
-  };
-
-  const handleEditImage = () => {
-    // Toggle to edit mode where the user can add text over the image
-    setEditMode(true);
   };
 
   const handleUploadDirectly = () => {
     // Call upload function directly if user decides not to edit
-    uploadImage();
-  };
-
-  const handleSaveEditedImage = () => {
-    // Implement logic to combine image and text, then upload
-    // This example simplifies that step
-    setEditMode(false);
     uploadImage();
   };
 
@@ -95,40 +81,20 @@ const Modal = ({
         />
         {previewUrl && (
           <div>
-            <img src={previewUrl} alt="Preview" className="mx-auto" />
-            {!editMode && (
-              <div className="flex justify-around mt-4">
-                <button
-                  onClick={handleUploadDirectly}
-                  className="py-2 px-4 bg-blue-500 text-white rounded"
-                >
-                  Upload
-                </button>
-                <button
-                  onClick={handleEditImage}
-                  className="py-2 px-4 bg-green-500 text-white rounded"
-                >
-                  Edit
-                </button>
-              </div>
-            )}
-            {editMode && (
-              <>
-                <input
-                  type="text"
-                  placeholder="Enter text for the image"
-                  value={textOverlay}
-                  onChange={(e) => setTextOverlay(e.target.value)}
-                  className="w-full p-2 border rounded mt-4"
-                />
-                <button
-                  onClick={handleSaveEditedImage}
-                  className="block w-full mt-4 py-2 bg-purple-600 text-white text-center rounded"
-                >
-                  Save & Upload
-                </button>
-              </>
-            )}
+            <Image
+              src={previewUrl}
+              width={600}
+              height={300}
+              layout="responsive"
+              className="w-full h-auto max-h-[500px] object-contain mx-auto"
+              alt="Preview"
+            />
+            <button
+              onClick={handleUploadDirectly}
+              className="py-2 px-4 bg-blue-500 text-white rounded"
+            >
+              Upload
+            </button>
           </div>
         )}
         {!previewUrl && uploadStatus !== "uploaded" && (

@@ -37,7 +37,7 @@ const LoginPage = () => {
 
   return (
     <div className="mt-[56px]">
-      <h1 className="text-center font-semibold text-3xl mt-10">Login</h1>
+      <h1 className="text-center font-semibold text-3xl pt-10">Login</h1>
       <form
         onSubmit={handleLogin}
         className="flex flex-col w-full p-12 mt-14 gap-8 shadow-[rgba(17, 17, 26, 0.1) 0px 0px 16px]"
