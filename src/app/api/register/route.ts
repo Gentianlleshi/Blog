@@ -1,56 +1,42 @@
 // src/app/api/register/route.ts
 
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
-  const { username, email, password, name } = await request.json();
-
-  // Define the GraphQL mutation for registering a new user
-  const REGISTER_USER_MUTATION = `
-      mutation RegisterUser($username: String!, $email: String!, $password: String!) {
-        registerUser(input: {
-          clientMutationId: "uniqueId",
-          username: $username,
-          email: $email,
-          password: $password
-        }) {
-          user {
-            userId
-            username
-            name
-            email
-          }
-        }
+  const { username, email, password } = await request.json();
+  const REGISTER_USER_MUTATION = `      
+  mutation RegisterUser($username: String!, $email: String!, $password: String!) {
+    registerUser(input: {
+      clientMutationId: "uniqueId",
+      username: $username,
+      email: $email,
+      password: $password
+    }) {
+      user {
+        userId
+        username
+        name
+        email
       }
-    `;
+    }
+  }`; // Your GraphQL mutation
 
   try {
-    // Execute the mutation using the WPGraphQL endpoint
-    const graphqlResponse = await fetch(
-      "https://sardinie.web-devtesting.xyz/index.php?graphql",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          query: REGISTER_USER_MUTATION,
-          variables: {
-            username,
-            email,
-            password,
-            name,
-          },
-        }),
-      }
-    );
+    const graphqlResponse = await fetch("https://sardinie.web-devtesting.xyz/index.php?graphql", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        query: REGISTER_USER_MUTATION,
+        variables: { username, email, password },
+      }),
+    });
 
-    // Parse the response from the WPGraphQL server
     const { data, errors } = await graphqlResponse.json();
 
-    // If there are errors, return a 400 Bad Request with the errors
     if (errors) {
-      return new Response(JSON.stringify({ errors }), {
+      return new NextResponse(JSON.stringify({ errors }), {
         status: 400,
         headers: {
           "Content-Type": "application/json",
@@ -58,17 +44,15 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    // On success, return the user data
-    return new Response(JSON.stringify(data.registerUser), {
-      status: 200,
+    return new NextResponse(JSON.stringify(data.registerUser), {
+      status: 201, // Use 201 to indicate a resource was successfully created
       headers: {
         "Content-Type": "application/json",
       },
     });
   } catch (error) {
-    // Handle fetch or server errors
-    return new Response(
-      JSON.stringify({ message: "Registration error", error: error }),
+    return new NextResponse(
+      JSON.stringify({ message: "Registration error", error }),
       {
         status: 500,
         headers: {

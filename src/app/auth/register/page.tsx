@@ -1,6 +1,6 @@
 // app/auth/register/page.tsx
 "use client";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
@@ -9,12 +9,10 @@ export default function RegisterPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [isRegistered, setIsRegistered] = useState(false);
   const router = useRouter();
 
   const registerUser = async (event: { preventDefault: () => void }) => {
     event.preventDefault();
-
     const response = await fetch("/api/register", {
       method: "POST",
       headers: {
@@ -24,20 +22,12 @@ export default function RegisterPage() {
     });
 
     if (response.ok) {
-      setIsRegistered(true); // Set the flag when registration is successful
+      router.push("/auth/login"); // Redirect to login page after successful registration
     } else {
       const errorData = await response.json();
       setError(errorData.message || "An error occurred during registration.");
     }
   };
-
-  // Redirect after registration
-  useEffect(() => {
-    // Now we can safely use router.push or other router methods here
-    if (isRegistered) {
-      router.push("/auth/login");
-    }
-  }, [isRegistered]);
 
   return (
     <div className="form-wrapper mt-[56px]">

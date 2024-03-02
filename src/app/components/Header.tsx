@@ -1,43 +1,31 @@
 // app/components/Header.tsx
 "use client";
-import React, { useEffect } from "react";
+import React from "react";
 import { FaUserCircle, FaBars, FaSignOutAlt } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { useSelector, useDispatch } from "react-redux";
-import { RootState } from "../redux/store"; // Adjust the import path as needed
-import { setLoginState, logout } from "../redux/slices/authSlice";
+import { useAuthStore } from "../stores/useAuthStore"; // Adjust the import path as needed
 
 const Header = () => {
   const router = useRouter();
-  const dispatch = useDispatch();
-  // Accessing the isLoggedIn and username directly from the auth state
-  useEffect(() => {
-    const token = localStorage.getItem("authToken");
-    const username = localStorage.getItem("username");
-    if (token && username) {
-      dispatch(setLoginState({ isLoggedIn: true, username }));
-    }
-  }, [dispatch]);
-  const { isLoggedIn, username } = useSelector(
-    (state: RootState) => state.auth
-  );
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+  const username = useAuthStore((state) => state.username);
+  const logout = useAuthStore((state) => state.logout);
 
-  const handleLogout = () => {
-    localStorage.removeItem("authToken");
-    localStorage.removeItem("username");
-    dispatch(logout());
-    router.push("/auth/login");
+  const handleLogout = async () => {
+    // Implement the logout logic here, which should clear the HTTP-only cookie
+    logout(); // Reset the auth state using Zustand
+    router.push("/auth/login"); // Redirect to the login page
   };
 
   return (
-    <header className="container p-4 flex justify-between items-center fixed top-0  bg-black/[0.2] backdrop-blur-[36px]">
+    <header className="container p-4 flex justify-between items-center fixed top-0 bg-black/[0.2] backdrop-blur-[36px]">
       <div className="cursor-pointer">
         <FaBars onClick={() => console.log("Toggle Categories")} />
       </div>
       <Link href="/">homepage</Link>
       <div>
-        {isLoggedIn ? (
+        {isAuthenticated ? (
           <div className="flex gap-2 cursor-pointer items-center">
             <span>{username}</span>
             <FaSignOutAlt onClick={handleLogout} title="Logout" />

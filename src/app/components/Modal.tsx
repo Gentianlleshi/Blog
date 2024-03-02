@@ -1,12 +1,11 @@
 // src/app/components/Modal.tsx
-"use client";
 import React, { useState, useRef } from "react";
-import { useDispatch } from "react-redux";
-import { setImageId } from "@/app/redux/slices/imageSlice";
+import { useAuthStore } from "@/app/stores/useAuthStore";
+import { useImageStore } from "@/app/stores/useImageStore";
 import { GrSubtractCircle } from "react-icons/gr";
 import { IoCameraOutline, IoImagesOutline } from "react-icons/io5";
-import Link from "next/link";
 import Image from "next/image";
+import Link from "next/link";
 
 const Modal = ({
   isOpen,
@@ -15,36 +14,34 @@ const Modal = ({
   isOpen: boolean;
   onClose: () => void;
 }) => {
-  const dispatch = useDispatch();
+  const { authToken, setAuthToken } = useAuthStore();
+  const { setImageId } = useImageStore();
+  console.log(authToken);
   const cameraInputRef = useRef<HTMLInputElement>(null);
   const galleryInputRef = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-  const [uploadStatus, setUploadStatus] = useState("idle"); // idle, uploading, uploaded, error
+  const [uploadStatus, setUploadStatus] = useState<
+    "idle" | "uploading" | "uploaded" | "error"
+  >("idle");
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const selectedFile = e.target.files[0];
       setFile(selectedFile);
-      setPreviewUrl(URL.createObjectURL(selectedFile)); // Generate preview URL
+      setPreviewUrl(URL.createObjectURL(selectedFile));
       setUploadStatus("idle");
     }
   };
 
-  const handleUploadDirectly = () => {
-    // Call upload function directly if user decides not to edit
-    uploadImage();
-  };
-
   const uploadImage = async () => {
-    if (!file) return;
+    if (!file || !authToken) return;
 
     const formData = new FormData();
-    formData.append("file", file); // Replace with edited image file if editing is implemented
+    formData.append("file", file);
 
     const wpMediaUrl =
       "https://sardinie.web-devtesting.xyz/wp-json/wp/v2/media";
-    const token = localStorage.getItem("authToken");
 
     setUploadStatus("uploading");
 
@@ -52,26 +49,27 @@ const Modal = ({
       const response = await fetch(wpMediaUrl, {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Disposition": `attachment; filename=${file.name}`,
+          Authorization: `Bearer ${authToken}`,
+          "Content-Disposition": `attachment; filename="${file.name}"`,
         },
         body: formData,
       });
-      const data = await response.json();
-      if (data.id) {
-        dispatch(setImageId(data.id));
-        setPreviewUrl(null); // Reset preview URL
+
+      if (response.ok) {
+        const data = await response.json();
+        setImageId(data.id);
+        setPreviewUrl(null);
         setUploadStatus("uploaded");
-        console.log("File uploaded to WordPress:", data.guid.rendered);
+      } else {
+        throw new Error("Failed to upload image");
       }
     } catch (error) {
-      console.error("Error uploading file to WordPress:", error);
+      console.error("Error uploading file:", error);
       setUploadStatus("error");
     }
   };
 
   if (!isOpen) return null;
-
   return (
     <div className="container p-4 fixed inset-0 bg-black/30 backdrop-blur-sm flex justify-center items-center">
       <div className="relative flex flex-col bg-white rounded-lg shadow-lg p-6 w-full max-w-lg">
@@ -90,7 +88,7 @@ const Modal = ({
               alt="Preview"
             />
             <button
-              onClick={handleUploadDirectly}
+              onClick={uploadImage}
               className="py-2 px-4 bg-blue-500 text-white rounded"
             >
               Upload

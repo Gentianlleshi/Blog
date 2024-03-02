@@ -1,7 +1,7 @@
 // src/app/create-post/page.tsx
 "use client";
 import React, { useState, useEffect, useRef } from "react";
-import { useRouter } from "next/navigation"; // Import from 'next/router'
+import { useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
 import { RootState } from "@/app/redux/store";
 import Image from "next/image";

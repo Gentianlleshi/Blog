@@ -1,16 +1,16 @@
 // src/app/auth/login/page.tsx
 "use client";
-
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useAuthStore } from "@/app/stores/useAuthStore"; // Adjust the path as necessary
 
-// Assuming onLoginSuccess is a client-side logic handler
 const LoginPage = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const router = useRouter();
+  const setCredentials = useAuthStore((state) => state.setCredentials);
 
   const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -23,12 +23,9 @@ const LoginPage = () => {
     });
 
     if (response.ok) {
-      const { authToken, username }: { authToken: string; username: string } =
-        await response.json();
-      console.log("authToken", authToken);
-      localStorage.setItem("authToken", authToken);
-      localStorage.setItem("username", username);
-      router.push("/");
+      const data = await response.json();
+      setCredentials(data.username, data.authToken);
+      router.push("/"); // Redirect to home page after successful login
     } else {
       const errorData = await response.json();
       setError(errorData.message || "Login failed");
