@@ -58,6 +58,7 @@ const Modal = ({
 
       if (response.ok) {
         const data = await response.json();
+        console.log(data);
         setImageId(data.id);
         setPreviewUrl(null);
         setUploadStatus("uploaded");
