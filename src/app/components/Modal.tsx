@@ -1,6 +1,6 @@
 // src/app/components/Modal.tsx
 import React, { useState, useRef } from "react";
-import { useAuthStore } from "@/app/stores/useAuthStore";
+// import { useAuthStore } from "@/app/stores/useAuthStore";
 import { useImageStore } from "@/app/stores/useImageStore";
 import { GrSubtractCircle } from "react-icons/gr";
 import { IoCameraOutline, IoImagesOutline } from "react-icons/io5";
@@ -14,9 +14,9 @@ const Modal = ({
   isOpen: boolean;
   onClose: () => void;
 }) => {
-  const { authToken, setAuthToken } = useAuthStore();
+  // const { authToken, setAuthToken } = useAuthStore();
   const { setImageId } = useImageStore();
-  console.log(authToken);
+  // console.log(authToken);
   const cameraInputRef = useRef<HTMLInputElement>(null);
   const galleryInputRef = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<File | null>(null);
@@ -33,8 +33,9 @@ const Modal = ({
       setUploadStatus("idle");
     }
   };
-
   const uploadImage = async () => {
+    // Retrieve the authToken from localStorage
+    const authToken = localStorage.getItem("authToken");
     if (!file || !authToken) return;
 
     const formData = new FormData();
