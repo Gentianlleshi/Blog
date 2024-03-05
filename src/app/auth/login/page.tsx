@@ -50,7 +50,7 @@ const LoginPage: React.FC = () => {
   };
 
   return (
-    <div className="mt-[56px]">
+    <div className="pt-[100px] h-screen">
       <h1 className="text-center font-semibold text-3xl pt-10">Login</h1>
       <form
         onSubmit={handleLogin}

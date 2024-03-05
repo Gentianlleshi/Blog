@@ -80,14 +80,15 @@ const Modal = ({
 
   if (!isOpen) return null;
   return (
-    <div className="container p-4 fixed inset-0 bg-black/30 backdrop-blur-sm flex justify-center items-center">
-      <div className="relative flex flex-col bg-white rounded-lg shadow-lg p-6 w-full max-w-lg">
+    <div className="container p-4 fixed inset-0 bg-black/80 backdrop-blur-sm flex justify-center items-center">
+      <div className="relative flex flex-col bg-black/80 rounded-lg shadow-lg p-6 w-full max-w-lg">
         <GrSubtractCircle
           onClick={onClose}
-          className="absolute top-4 right-4 h-6 w-6 text-red-600 cursor-pointer"
+          size={8}
+          className="absolute h-[25px] w-[25px] top-4 right-4 cursor-pointer fill-white/80  bg-black/45 rounded-full"
         />
         {previewUrl && (
-          <div>
+          <div className="grid">
             <Image
               src={previewUrl}
               width={600}
@@ -99,7 +100,7 @@ const Modal = ({
             {uploadStatus !== "uploaded" && (
               <button
                 onClick={uploadImage}
-                className="py-2 px-4 bg-blue-500 text-white rounded"
+                className="flex items-center gap-2 px-4 py-2 bg-white/10 text-white/80 rounded mt-4 justify-center"
               >
                 Upload
               </button>
@@ -109,14 +110,14 @@ const Modal = ({
         {!previewUrl && uploadStatus !== "uploaded" && (
           <div className="flex flex-col items-center">
             <button
-              className="flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded mt-4"
+              className="flex items-center gap-2 px-4 py-2 bg-white/10 text-white/80 rounded mt-4"
               onClick={() => cameraInputRef.current?.click()}
             >
               <IoCameraOutline size={24} />
               Use Camera
             </button>
             <button
-              className="flex items-center gap-2 px-4 py-2 bg-green-500 text-white rounded mt-4"
+              className="flex items-center gap-2 px-4 py-2 bg-white/10 text-white/80 rounded mt-4"
               onClick={() => galleryInputRef.current?.click()}
             >
               <IoImagesOutline size={24} />

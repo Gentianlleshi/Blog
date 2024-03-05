@@ -1,5 +1,6 @@
 // app/api/allPosts/route.ts;
-// export const runtime = "experimental-edge"
+
+// export const runtime = "experimental-edge"  // for experimental runtime in case page is not set as dynamic
 
 export async function GET() {
   const currentMinute = new Date().getMinutes();

@@ -5,6 +5,8 @@ import { FaUserCircle, FaBars, FaSignOutAlt } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useAuthStore } from "../stores/useAuthStore"; // Adjust the import path as needed
+import FullscreenToggle from "./FullscreenToggle";
+import { CiHome } from "react-icons/ci";
 
 const Header = () => {
   const router = useRouter();
@@ -22,24 +24,40 @@ const Header = () => {
   };
 
   return (
-    <header className="container p-4 flex justify-between items-center fixed top-0 bg-black/[0.2] backdrop-blur-[36px]">
-      <div className="cursor-pointer">
-        <FaBars onClick={() => console.log("Toggle Categories")} />
+    <header className="container p-4 flex justify-between items-center fixed top-0 bg-black/[0.9] backdrop-blur-[36px]">
+      <div className="cursor-pointer w-1/3">
+        <FullscreenToggle />
+        {/* <FaBars onClick={() => console.log("Toggle Categories")} /> */}
       </div>
-      <Link href="/">homepage</Link>
-      <div>
+      <div className="w-1/3 flex justify-center">
+        <Link
+          href="/"
+          className="border rounded-full border-white/60 shadow-[0px_0px_30px_-5px_#ae9a9a]"
+        >
+          <CiHome className="fill-white/80 m-2" />
+        </Link>
+      </div>
+      <div className="w-1/3">
         {isAuthenticated ? (
-          <div className="flex gap-2 cursor-pointer items-center">
-            <span>{username}</span>
-            <FaSignOutAlt onClick={handleLogout} title="Logout" />
+          <div className="flex gap-2 cursor-pointer items-center justify-end">
+            <span className="text-white/80">{username}</span>
+            <div className="border rounded-full border-white/60 shadow-[0px_0px_30px_-5px_#ae9a9a]">
+              <FaSignOutAlt
+                onClick={handleLogout}
+                title="Logout"
+                className="fill-white/60 m-2"
+              />
+            </div>
           </div>
         ) : (
           <div
             onClick={() => router.push("/auth/login")}
-            className="flex gap-2 items-center cursor-pointer"
+            className="flex gap-2 items-center cursor-pointer  justify-end"
           >
-            <span>Login</span>
-            <FaUserCircle className="h-6 w-6" />
+            <span className="text-white/80">Login</span>
+            <div className="border rounded-full border-white/60 shadow-[0px_0px_30px_-5px_#ae9a9a]">
+              <FaUserCircle className=" fill-white/50 m-2" />
+            </div>
           </div>
         )}
       </div>

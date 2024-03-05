@@ -26,7 +26,7 @@ const PostLayout = () => {
   }, [postsRefreshTrigger]);
 
   return (
-    <div>
+    <div className="grid gap-20">
       {posts.map((post) => (
         <SinglePost key={post.id} post={post as PostNode} />
       ))}

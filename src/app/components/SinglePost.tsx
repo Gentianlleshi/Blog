@@ -39,7 +39,7 @@ const SinglePost: React.FC<SinglePostProps> = ({ post }) => {
         <FaRegUser />
         <h3>{post.author.node.name}</h3>
       </div>
-      <h2>{post.title}</h2>
+      <h2 className="text-lg font-bold text-white/80">{post.title}</h2>
       <div key={post.id}>
         {imageSrc && (
           <Image
@@ -48,7 +48,7 @@ const SinglePost: React.FC<SinglePostProps> = ({ post }) => {
             alt={post.title + " Post Image"}
             width={600}
             height={300}
-            className="w-full h-auto max-h-[500px] object-contain"
+            className="w-full h-auto max-h-[500px] object-contain rounded-lg bg-black"
           />
         )}
       </div>

@@ -32,15 +32,14 @@ body {
   }
 } */
 
-/* #cacaca is the color of the input border */
-/* shadow-[rgba(17,_17,_26,_0.1)_0px_0px_16px] is the class for the card shadow  */
-/* background-color: #625656; is the color of the button on hover  */
+/* 
+tailwind class for button with icon 
+border rounded-full border-white/60 shadow-[0px_0px_40px_10px_#4a5568] 
 
-/* --tw-shadow: rgba(17, 17, 26, 0.1) 0px 0px 16px;
---tw-shadow-colored: 0px 0px 16px var(--tw-shadow-color);
-box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000),
-  var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow); is for box shadow  */
+tailwind class for icons
+fill-white/60 m-1
 
+*/
 * {
   margin: 0;
   padding: 0;
@@ -50,8 +49,15 @@ html {
   scrollbar-width: none;
   background-color: #f2f2f2;
 }
+body {
+  color: rgb(255 255 255 / 0.6);
+}
+p {
+  color: rgb(250 250 250 / 0.8);
+}
 
 input {
+  color: #000000;
   border: 1px solid #cacaca;
   padding: 4px 8px;
   border-radius: 6px;
@@ -84,16 +90,4 @@ button[type="submit"]:hover,
   cursor: pointer;
   color: #fff;
   width: fit-content;
-}
-footer svg {
-  color: #5b3f3f;
-}
-footer svg path {
-  fill: #f4bfbf;
-}
-footer svg:hover {
-  color: #f4bfbf;
-}
-footer svg:hover path {
-  fill: #5b3f3f;
 }

@@ -68,7 +68,7 @@ export default function CreatePostPage() {
     }
   };
   return (
-    <div className="mt-[56px] container p-4">
+    <div className="pt-[100px] container p-4">
       <h1 className="text-center font-semibold text-3xl pt-10">
         Create a New Post
       </h1>
@@ -100,8 +100,7 @@ export default function CreatePostPage() {
               alt="Uploaded"
               width={600}
               height={300}
-              layout="responsive"
-              className="w-full h-auto max-h-[500px] object-contain"
+              className="w-full h-auto max-h-[500px] object-contain rounded-lg bg-black"
             />
           </div>
         </div>
