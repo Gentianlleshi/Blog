@@ -9,10 +9,9 @@ const PostLayout = () => {
 
   useEffect(() => {
     const fetchPosts = async () => {
-      const response = await fetch("/api/allPosts");
+      const cacheBuster = new Date().getTime();
+      const response = await fetch(`/api/allPosts?_=${cacheBuster}`);
       const data = await response.json();
-      // console.log(response);
-      // console.log(data);
       setPosts(data.map(({ node }: { node: PostNode }) => node));
     };
 

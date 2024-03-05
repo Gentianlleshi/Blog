@@ -12,7 +12,7 @@ const Header = () => {
   // const username = useAuthStore((state) => state.username);
   const username = useAuthStore((state) => state.username);
 
-  console.log("username", username);
+  // console.log("username", username);
   const logout = useAuthStore((state) => state.logout);
 
   const handleLogout = async () => {

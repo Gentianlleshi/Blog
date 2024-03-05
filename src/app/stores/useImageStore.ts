@@ -35,7 +35,7 @@
 
 
 // src/stores/useImageStore.ts
-import create from 'zustand';
+import {create }from 'zustand';
 
 interface ImageState {
   imageId: string;
