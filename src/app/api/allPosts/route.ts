@@ -1,8 +1,11 @@
 // app/api/allPosts/route.ts;
 export async function GET() {
+  const currentMinute = new Date().getMinutes();
+  // Alternate between 999 and 998 based on whether the current minute is even or odd
+  const postsCount = currentMinute % 2 === 0 ? 999 : 998;
   const query = `
   query NewQuery {
-    posts(first: 9999) {
+    posts(first: ${postsCount}) {
       edges {
         node {
           id
