@@ -1,4 +1,9 @@
 // app/api/allPosts/route.ts;
+
+export const config = {
+  runtime: 'experimental-edge',
+};
+
 export async function GET() {
   const currentMinute = new Date().getMinutes();
   // Alternate between 999 and 998 based on whether the current minute is even or odd
@@ -35,7 +40,7 @@ export async function GET() {
           Expires: "0",
         },
         next: {
-          revalidate: 0,
+          revalidate: 1,
         },
         body: JSON.stringify({ query }),
       }
