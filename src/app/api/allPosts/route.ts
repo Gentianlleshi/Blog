@@ -45,12 +45,15 @@ export async function GET() {
     const { data } = await response.json();
     return new Response(JSON.stringify(data.posts.edges), {
       status: 200,
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json","Cache-Control": "no-cache, no-store, must-revalidate, max-age=0",
+      Pragma: "no-cache",
+      Expires: "0", },
     });
   } catch (error) {
     return new Response(JSON.stringify({ error: "Failed to fetch posts" }), {
       status: 500,
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json","Cache-Control": "no-cache, no-store, must-revalidate, max-age=0",Pragma: "no-cache",
+      Expires: "0",},
     });
   }
 }
