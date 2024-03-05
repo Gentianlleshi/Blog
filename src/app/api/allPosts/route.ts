@@ -1,5 +1,5 @@
 // app/api/allPosts/route.ts;
-export const runtime = "experimental-edge"
+// export const runtime = "experimental-edge"
 
 export async function GET() {
   const currentMinute = new Date().getMinutes();
