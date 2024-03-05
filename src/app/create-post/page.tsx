@@ -48,6 +48,7 @@ export default function CreatePostPage() {
           content,
           imageId, // Ensure imageId is passed for image handling
         }),
+        cache: "no-cache",
       });
 
       const responseData = await response.json();
