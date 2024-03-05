@@ -2,10 +2,12 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import SinglePost from "./SinglePost";
+import useStore from "../stores/useStore";
 
 import { PostNode } from "../types";
 const PostLayout = () => {
   const [posts, setPosts] = useState<PostNode[]>([]);
+  const postsRefreshTrigger = useStore((state) => state.postsRefreshTrigger);
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -19,7 +21,7 @@ const PostLayout = () => {
     // const interval = setInterval(fetchPosts, 10 * 1000); // Re-fetch every 10 seconds
 
     // return () => clearInterval(interval);
-  }, []);
+  }, [[postsRefreshTrigger]]);
 
   return (
     <div>

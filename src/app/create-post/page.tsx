@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation"; // Correct import for useRouter
 import Image from "next/image";
 import { useImageStore } from "@/app/stores/useImageStore";
 import { useAuthStore } from "@/app/stores/useAuthStore";
+import { useStore } from "@/app/stores/useStore";
 
 export default function CreatePostPage() {
   const { imageUrl, imageId } = useImageStore();
@@ -13,6 +14,7 @@ export default function CreatePostPage() {
   const [content, setContent] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
+  const { triggerPostsRefresh } = useStore();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -21,6 +23,7 @@ export default function CreatePostPage() {
     if (!isAuthenticated) {
       console.error("Not logged in. Redirecting to login page.");
       router.push("/login");
+      triggerPostsRefresh();
       setIsSubmitting(false);
       return;
     }
