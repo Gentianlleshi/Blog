@@ -3,9 +3,11 @@
 import React, { useEffect, useState } from "react";
 import SinglePost from "./SinglePost";
 import useStore from "../stores/useStore";
+import { unstable_noStore as noStore } from "next/cache";
 
 import { PostNode } from "../types";
 const PostLayout = () => {
+  noStore();
   const [posts, setPosts] = useState<PostNode[]>([]);
   const postsRefreshTrigger = useStore((state) => state.postsRefreshTrigger);
 
