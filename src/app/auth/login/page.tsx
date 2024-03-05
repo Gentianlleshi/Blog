@@ -1,16 +1,16 @@
 // src/app/auth/login/page.tsx
 "use client";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import React, { useState } from "react";
+import { useRouter } from "next/navigation"; // Correct import for useRouter
 import Link from "next/link";
 import { useAuthStore } from "@/app/stores/useAuthStore"; // Adjust the path as necessary
 
-const LoginPage = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+const LoginPage: React.FC = () => {
+  const [username, setUsername] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [error, setError] = useState<string>("");
   const router = useRouter();
-  const setCredentials = useAuthStore((state) => state.setCredentials);
+  const { setAuthToken } = useAuthStore();
 
   const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -23,13 +23,30 @@ const LoginPage = () => {
     });
 
     if (response.ok) {
-      const data = await response.json();
-      setCredentials(data.username, data.authToken);
-      router.push("/"); // Redirect to home page after successful login
+      const { authToken, username, isAuthenticated } = await response.json();
+      const { setAuthToken, setUsername } = useAuthStore.getState();
+      setAuthToken(authToken);
+      setUsername(username);
+      const { setCredentials } = useAuthStore.getState();
+      setCredentials(username, authToken);
+
+      console.log(
+        "Login successful and credentials set in store",
+        username,
+        authToken,
+        isAuthenticated
+      );
+      router.push("/"); // Redirect
     } else {
-      const errorData = await response.json();
-      setError(errorData.message || "Login failed");
+      // Handle error
     }
+
+    // Later in the application, retrieving the authToken
+    // const authToken = useAuthStore((state) => state.authToken); // From Zustand
+    // console.log("Retrieved authToken from Zustand:", authToken);
+
+    const storedToken = localStorage.getItem("authToken"); // From localStorage
+    console.log("Retrieved authToken from localStorage:", storedToken);
   };
 
   return (

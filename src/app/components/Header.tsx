@@ -9,7 +9,10 @@ import { useAuthStore } from "../stores/useAuthStore"; // Adjust the import path
 const Header = () => {
   const router = useRouter();
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+  // const username = useAuthStore((state) => state.username);
   const username = useAuthStore((state) => state.username);
+
+  console.log("username", username);
   const logout = useAuthStore((state) => state.logout);
 
   const handleLogout = async () => {

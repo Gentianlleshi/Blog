@@ -8,7 +8,7 @@ import { useAuthStore } from "@/app/stores/useAuthStore"; // Adjust the import p
 export default function NewPost() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated); // Use Zustand to determine if the user is authenticated
-  console.log(isAuthenticated);
+  // console.log(isAuthenticated);
 
   return (
     <>

@@ -1,6 +1,6 @@
 // src/app/api/login/route.ts
 import { NextRequest, NextResponse } from "next/server";
-import { serialize } from "cookie";
+import {useAuthStore }from '@/app/stores/useAuthStore';
 
 export async function POST(request: NextRequest) {
   const { username, password } = await request.json();
@@ -19,8 +19,10 @@ export async function POST(request: NextRequest) {
     }
   }`; // Your GraphQL mutation
 
+
+
   try {
-    const graphqlResponse = await fetch("https://sardinie.web-devtesting.xyz/index.php?graphql", {
+    const graphqlResponse = await fetch("https://sardinie.web-devtesting.xyz/graphql", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -37,20 +39,12 @@ export async function POST(request: NextRequest) {
       throw new Error(errors?.[0]?.message || "Login failed");
     }
 
-
-    
-
     const headers = {
-      "Set-Cookie": serialize("authToken", data.login.authToken, {
-        path: "/",
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "strict",
-      }),
       "Content-Type": "application/json",
     };
 
     return new NextResponse(JSON.stringify({
+      authToken: data.login.authToken,
       username: data.login.user.name,
     }), {
       status: 200,

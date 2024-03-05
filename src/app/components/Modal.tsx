@@ -15,7 +15,7 @@ const Modal = ({
   onClose: () => void;
 }) => {
   // const { authToken, setAuthToken } = useAuthStore();
-  const { setImageId } = useImageStore();
+
   // console.log(authToken);
   const cameraInputRef = useRef<HTMLInputElement>(null);
   const galleryInputRef = useRef<HTMLInputElement>(null);
@@ -24,6 +24,7 @@ const Modal = ({
   const [uploadStatus, setUploadStatus] = useState<
     "idle" | "uploading" | "uploaded" | "error"
   >("idle");
+  const { setImageData } = useImageStore();
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -35,7 +36,10 @@ const Modal = ({
   };
   const uploadImage = async () => {
     // Retrieve the authToken from localStorage
-    const authToken = localStorage.getItem("authToken");
+    const auth = localStorage.getItem("auth");
+    const authParsed = auth ? JSON.parse(auth) : null;
+    const authToken = authParsed ? authParsed.state.authToken : null;
+    console.log("AuthToken from localStorage in Modal:", authToken);
     if (!file || !authToken) return;
 
     const formData = new FormData();
@@ -58,10 +62,13 @@ const Modal = ({
 
       if (response.ok) {
         const data = await response.json();
-        console.log(data);
-        setImageId(data.id);
-        setPreviewUrl(null);
+        console.log(data.source_url, data.id);
+        const imageId = data.id; // Replace with actual data field names
+        const imageUrl = data.source_url; // Replace with actual data field names
+        setImageData(imageId, imageUrl);
         setUploadStatus("uploaded");
+
+        isOpen = false;
       } else {
         throw new Error("Failed to upload image");
       }
@@ -89,12 +96,14 @@ const Modal = ({
               className="w-full h-auto max-h-[500px] object-contain mx-auto"
               alt="Preview"
             />
-            <button
-              onClick={uploadImage}
-              className="py-2 px-4 bg-blue-500 text-white rounded"
-            >
-              Upload
-            </button>
+            {uploadStatus !== "uploaded" && (
+              <button
+                onClick={uploadImage}
+                className="py-2 px-4 bg-blue-500 text-white rounded"
+              >
+                Upload
+              </button>
+            )}
           </div>
         )}
         {!previewUrl && uploadStatus !== "uploaded" && (
