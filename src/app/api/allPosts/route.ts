@@ -1,8 +1,5 @@
 // app/api/allPosts/route.ts;
 
-export const config = {
-  runtime: 'experimental-edge',
-};
 
 export async function GET() {
   const currentMinute = new Date().getMinutes();
