@@ -57,7 +57,9 @@ export default function CreatePostPage() {
         console.log("Post created successfully", responseData);
         setTitle("");
         setContent("");
+        triggerPostsRefresh();
         router.push("/"); // Redirect to home or another page as needed
+        triggerPostsRefresh();
       } else {
         throw new Error(responseData.message || "Failed to create post");
       }

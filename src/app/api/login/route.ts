@@ -1,6 +1,5 @@
 // src/app/api/login/route.ts
 import { NextRequest, NextResponse } from "next/server";
-import {useAuthStore }from '@/app/stores/useAuthStore';
 
 export async function POST(request: NextRequest) {
   const { username, password } = await request.json();
@@ -15,23 +14,25 @@ export async function POST(request: NextRequest) {
       user {
         id
         name
+        userId
       }
     }
   }`; // Your GraphQL mutation
 
-
-
   try {
-    const graphqlResponse = await fetch("https://sardinie.web-devtesting.xyz/graphql", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        query: LOGIN_MUTATION,
-        variables: { username, password },
-      }),
-    });
+    const graphqlResponse = await fetch(
+      "https://sardinie.web-devtesting.xyz/graphql",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          query: LOGIN_MUTATION,
+          variables: { username, password },
+        }),
+      }
+    );
 
     const { data, errors } = await graphqlResponse.json();
 
@@ -43,19 +44,25 @@ export async function POST(request: NextRequest) {
       "Content-Type": "application/json",
     };
 
-    return new NextResponse(JSON.stringify({
-      authToken: data.login.authToken,
-      username: data.login.user.name,
-    }), {
-      status: 200,
-      headers,
-    });
+    return new NextResponse(
+      JSON.stringify({
+        authToken: data.login.authToken,
+        username: data.login.user.name,
+      }),
+      {
+        status: 200,
+        headers,
+      }
+    );
   } catch (error) {
-    return new NextResponse(JSON.stringify({ message: (error as Error).message }), {
-      status: 500,
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    return new NextResponse(
+      JSON.stringify({ message: (error as Error).message }),
+      {
+        status: 500,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
   }
 }

@@ -5,6 +5,16 @@ import { useRouter } from "next/navigation"; // Correct import for useRouter
 import Link from "next/link";
 import { useAuthStore } from "@/app/stores/useAuthStore"; // Adjust the path as necessary
 
+import { jwtDecode } from "jwt-decode";
+interface JWTPayload {
+  data: {
+    user: {
+      id: string;
+    };
+  };
+  // ... any other properties you expect in the payload
+}
+
 const LoginPage: React.FC = () => {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -22,19 +32,21 @@ const LoginPage: React.FC = () => {
       body: JSON.stringify({ username, password }),
     });
 
-    if (response.ok) {
-      const { authToken, username, isAuthenticated } = await response.json();
-      const { setAuthToken, setUsername } = useAuthStore.getState();
-      setAuthToken(authToken);
-      setUsername(username);
-      const { setCredentials } = useAuthStore.getState();
-      setCredentials(username, authToken);
+    const jsonResponse = await response.json();
 
+    const authToken = jsonResponse.authToken;
+
+    // Decode the JWT to get the user ID
+    const decodedToken = jwtDecode<JWTPayload>(authToken); // Use type assertion here
+    const userId = decodedToken.data.user.id;
+
+    if (response.ok) {
+      useAuthStore.getState().setCredentials(username, authToken, userId);
       console.log(
-        "Login successful and credentials set in store",
-        username,
-        authToken,
-        isAuthenticated
+        "Login successful",
+        // username,
+        // authToken,
+        userId
       );
       router.push("/"); // Redirect
     } else {
