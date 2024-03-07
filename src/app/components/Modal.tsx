@@ -85,7 +85,7 @@ const Modal = ({
         <GrSubtractCircle
           onClick={onClose}
           size={8}
-          className="absolute h-[25px] w-[25px] top-4 right-4 cursor-pointer fill-white/80  bg-black/45 rounded-full"
+          className="absolute h-[25px] w-[25px] top-4 right-4 cursor-pointer text-white  bg-black/45 rounded-full"
         />
         {previewUrl && (
           <div className="grid">
@@ -113,14 +113,14 @@ const Modal = ({
               className="flex items-center gap-2 px-4 py-2 bg-white/10 text-white/80 rounded mt-4"
               onClick={() => cameraInputRef.current?.click()}
             >
-              <IoCameraOutline size={24} />
+              <IoCameraOutline size={24} color="#fff" />
               Use Camera
             </button>
             <button
               className="flex items-center gap-2 px-4 py-2 bg-white/10 text-white/80 rounded mt-4"
               onClick={() => galleryInputRef.current?.click()}
             >
-              <IoImagesOutline size={24} />
+              <IoImagesOutline size={24} color="#fff" />
               Choose From Gallery
             </button>
             <input

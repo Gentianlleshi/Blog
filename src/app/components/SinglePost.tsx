@@ -35,7 +35,7 @@ const SinglePost: React.FC<SinglePostProps> = ({ post }) => {
   // Render the post details
   return (
     <article>
-      <h2 className="text-lg font-bold text-white/80">{post.title}</h2>
+      <h2 className="text-lg font-bold text-white/80 my-3">{post.title}</h2>
       <div key={post.id}>
         {imageSrc && (
           <Image
@@ -47,7 +47,7 @@ const SinglePost: React.FC<SinglePostProps> = ({ post }) => {
             className="w-full h-auto max-h-[500px] object-contain rounded-lg bg-black"
           />
         )}
-        <div className="flex gap-1 items-center">
+        <div className="flex gap-1 my-2 items-center">
           <FaRegUser />
           <h3>{post.author.node.name}</h3>
         </div>
