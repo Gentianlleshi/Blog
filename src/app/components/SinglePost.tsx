@@ -35,10 +35,6 @@ const SinglePost: React.FC<SinglePostProps> = ({ post }) => {
   // Render the post details
   return (
     <article>
-      <div className="flex gap-1 items-center">
-        <FaRegUser />
-        <h3>{post.author.node.name}</h3>
-      </div>
       <h2 className="text-lg font-bold text-white/80">{post.title}</h2>
       <div key={post.id}>
         {imageSrc && (
@@ -51,6 +47,10 @@ const SinglePost: React.FC<SinglePostProps> = ({ post }) => {
             className="w-full h-auto max-h-[500px] object-contain rounded-lg bg-black"
           />
         )}
+        <div className="flex gap-1 items-center">
+          <FaRegUser />
+          <h3>{post.author.node.name}</h3>
+        </div>
       </div>
       {/* <div>
         {post.comments.edges.map((comment) => (

@@ -34,7 +34,7 @@ const Header = () => {
           href="/"
           className="border rounded-full border-white/60 shadow-[0px_0px_30px_-5px_#ae9a9a]"
         >
-          <CiHome className="fill-white/80 m-2" />
+          <CiHome className="fill-white m-2" />
         </Link>
       </div>
       <div className="w-1/3">
@@ -45,7 +45,7 @@ const Header = () => {
               <FaSignOutAlt
                 onClick={handleLogout}
                 title="Logout"
-                className="fill-white/60 m-2"
+                className="fill-white/90 m-2"
               />
             </div>
           </div>
@@ -56,7 +56,7 @@ const Header = () => {
           >
             <span className="text-white/80">Login</span>
             <div className="border rounded-full border-white/60 shadow-[0px_0px_30px_-5px_#ae9a9a]">
-              <FaUserCircle className=" fill-white/50 m-2" />
+              <FaUserCircle className=" fill-white/90 m-2" />
             </div>
           </div>
         )}

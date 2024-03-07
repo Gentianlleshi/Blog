@@ -28,9 +28,9 @@ const FullscreenToggle = () => {
       className="border rounded-full border-white/60 shadow-[0px_0px_30px_-5px_#ae9a9a] flex"
     >
       {isFullscreen ? (
-        <LiaCompressSolid className="fill-white/80 m-3" size={10} />
+        <LiaCompressSolid className="fill-white m-2" size={14} />
       ) : (
-        <BiExpandAlt className="fill-white/80 m-3" size={10} />
+        <BiExpandAlt className="fill-white m-2" size={14} />
       )}
     </button>
   );

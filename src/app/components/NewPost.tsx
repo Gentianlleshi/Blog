@@ -21,7 +21,7 @@ export default function NewPost() {
           ) : (
             // <div className="border rounded-full border-white/60 shadow-[0px_0px_30px_-5px_#000]">
             <IoIosAddCircleOutline
-              className="fill-white/80 h-10 w-10 text-[#892727] bg-black/45 rounded-full cursor-pointer fixed bottom-5 right-4"
+              className="fill-white h-10 w-10 text-[#892727] bg-black/45 rounded-full cursor-pointer fixed bottom-5 right-4"
               size={10}
               onClick={() => setIsModalOpen(true)}
             />
