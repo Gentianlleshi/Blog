@@ -5,8 +5,9 @@ import { FaUserCircle, FaBars, FaSignOutAlt } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useAuthStore } from "../stores/useAuthStore"; // Adjust the import path as needed
-import FullscreenToggle from "./FullscreenToggle";
+// import FullscreenToggle from "./FullscreenToggle";
 import { CiHome } from "react-icons/ci";
+import { RxDashboard } from "react-icons/rx";
 
 const Header = () => {
   const router = useRouter();
@@ -26,7 +27,13 @@ const Header = () => {
   return (
     <header className="container p-4 flex justify-between items-center fixed top-0 bg-black/[0.9] backdrop-blur-[36px]">
       <div className="cursor-pointer w-1/3">
-        <FullscreenToggle />
+        {/* <FullscreenToggle /> */}
+        <Link href="/dashboard" className="flex">
+          <div className="border rounded-full border-white/60 shadow-[0px_0px_30px_-5px_#ae9a9a]">
+            <RxDashboard className="text-white/90 m-2" />
+          </div>
+        </Link>
+
         {/* <FaBars onClick={() => console.log("Toggle Categories")} /> */}
       </div>
       <div className="w-1/3 flex justify-center">
@@ -34,7 +41,7 @@ const Header = () => {
           href="/"
           className="border rounded-full border-white/60 shadow-[0px_0px_30px_-5px_#ae9a9a]"
         >
-          <CiHome className="fill-white m-2" />
+          <CiHome className="fill-white m-2 stroke-1	" />
         </Link>
       </div>
       <div className="w-1/3">

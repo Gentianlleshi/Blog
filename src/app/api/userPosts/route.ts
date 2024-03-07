@@ -1,38 +1,44 @@
 // app/api/userPosts/route.ts
-import useAuthStore from "@/app/stores/useAuthStore";
-import { use } from "react";
+// import useAuthStore from "@/app/stores/useAuthStore";
+import { jwtDecode } from "jwt-decode";
 
 export async function GET(request: Request) {
   const authHeader = request.headers.get("Authorization");
-  const authToken = authHeader?.split(" ")[1];
-  const { id: userId } = useAuthStore.getState();
-  console.log("userId", userId, "authToken", authToken);
-  // const { authToken } = useAuthStore((state) => ({
-  //   authToken: state.authToken,
-  // }));
-  // const { authToken } = useAuthStore.getState();
+  const authToken = authHeader?.split(" ")[1] || "";
+  // const { id: userId } = useAuthStore.getState();
+  // const userId = 12;
+  let userId;
+  try {
+    const decodedToken = jwtDecode<{ data: { user: { id: string } } }>(
+      authToken
+    );
+    console.log(decodedToken);
+    userId = parseInt(decodedToken.data.user.id, 10);
+  } catch (error) {
+    console.error("Error decoding token:", error);
+    // Handle error (e.g., return an appropriate response to the client)
+  }
 
-  // Ensure the userId obtained is correct and not null
-  if (!userId) {
-    return new Response(JSON.stringify({ message: "User ID is missing" }), {
+  if (!authToken) {
+    return new Response(JSON.stringify({ message: "Auth token is missing" }), {
       status: 401,
       headers: { "Content-Type": "application/json" },
     });
   }
 
   const USER_POSTS_QUERY = `
-    query GetUserPosts($userId: ID!) {
+    query GetUserPosts($userId: Int!) {
       posts(where: { author: $userId }) {
         nodes {
-          id
-          title
-          date
-          content
+        id
+        title
+        content
         }
       }
     }
-  `;
+    `;
 
+  // You'll need to modify this to get the user ID from the token or context
   const variables = { userId };
 
   const graphqlResponse = await fetch(
